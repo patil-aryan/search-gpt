@@ -1,0 +1,29 @@
+services:
+  searxng:
+    build: 
+      context: .
+      dockerfile: searchxng.dockerfile
+    expose:
+      - 4000
+    ports:
+      - 4000:8080
+    networks:
+      - searchgpt 
+
+  future-service-backend:
+    build: 
+      context: .
+      dockerfile: backend.dockerfile
+      args:
+        SEARXNG_API_URL: "http://searnxg:8080"
+    depends_on:
+      - searxng
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    networks:
+      - searchgpt
+
+networks: 
+  searchgpt:
